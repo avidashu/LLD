@@ -361,12 +361,3 @@ switch(type) { }
 - **Constructor Injection** → How dependency is supplied
 
 ---
-
-If you want next:
-
-- Strategy vs Template Method
-- Strategy in Spring Boot (real beans & DI)
-- Convert this into a real interview LLD problem
-- UML diagram walkthrough
-
-Just say 🚀
