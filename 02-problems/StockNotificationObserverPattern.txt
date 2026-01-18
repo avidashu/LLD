@@ -1,0 +1,119 @@
+# 📚 Stock Notification Observer Pattern - Interview Problem
+
+> **Exactly** how interviewers expect you to think — problem statement only, no solution yet ✨
+
+---
+
+## 📌 Problem Context
+
+You are working on an **e-commerce platform** that sells electronic products. One of the most common user complaints is:
+
+> “I don’t know when an out-of-stock product becomes available again.”
+
+To improve user experience, the business wants to implement a **stock notification system**.
+
+---
+
+## 🎯 Functional Requirements
+
+1. The system should track **stock availability** for a product (e.g., *iPhone*).
+2. Users should be able to **subscribe** to stock updates.
+3. When the product goes from **out of stock to in stock**, all subscribed users must be **notified automatically**.
+4. Notifications can be sent via **multiple channels**:
+
+   * Email
+   * Mobile/SMS
+   * (Future) WhatsApp / Push Notification
+5. Users can **subscribe and unsubscribe at runtime**.
+6. The system should support **multiple subscribers at the same time**.
+
+---
+
+## ❌ Constraints (Important for Interview)
+
+* The stock service **must not** know *how* notifications are sent.
+* Adding a new notification channel should **NOT require modifying existing code**.
+* The solution should avoid:
+
+  * `if-else` chains
+  * `switch` statements
+  * Hard-coded notification logic
+* The design should be:
+
+  * Loosely coupled
+  * Easily extensible
+  * Testable
+
+---
+
+## 🧩 Non-Functional Requirements
+
+* Code should follow **SOLID principles**.
+* The design should allow:
+
+  * Reuse of notification logic
+  * Clean separation of responsibilities
+* Prefer **composition over inheritance**.
+
+---
+
+## 🧠 What the Interviewer Is Testing
+
+| Skill             | What they observe                     |
+| ----------------- | ------------------------------------- |
+| Design thinking   | Can you identify changing parts?      |
+| Pattern knowledge | Do you recognize Observer pattern?    |
+| OOP basics        | Interfaces, abstraction, polymorphism |
+| Clean code        | SRP, OCP, loose coupling              |
+| Communication     | Can you explain runtime flow clearly? |
+
+---
+
+## 🧪 Clarifications You Can Ask (Interview-safe)
+
+You *may* ask:
+
+* “Should users be notified every time stock changes or only when it becomes available?”
+* “Can multiple users subscribe at the same time?”
+* “Should notification logic be extendable?”
+
+(All answers are **YES**, except notification should only happen when stock becomes available.)
+
+---
+
+## ✅ Expected Output (Conceptual)
+
+When stock becomes available:
+
+```
+Email sent to user1@email.com
+Email sent to user2@email.com
+SMS sent to user3
+```
+
+---
+
+## 🛑 What You Should NOT Do
+
+* Do NOT use inheritance for notification logic
+* Do NOT hardcode notification types
+* Do NOT tightly couple stock logic with notification logic
+
+---
+
+## 📍 Your Task (Don’t code yet)
+
+1. Identify:
+
+   * Who is the **subject / observable**
+   * Who are the **observers**
+2. Decide:
+
+   * What interfaces are required
+   * What methods belong where
+3. Explain:
+
+   * How runtime notification will happen
+
+---
+
