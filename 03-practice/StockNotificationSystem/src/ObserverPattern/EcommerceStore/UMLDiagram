@@ -1,0 +1,112 @@
+# 📐 UML Class Diagram — Stock Notification (Observer Pattern)
+
+### (Text-based UML — exactly what interviewers expect on a whiteboard)
+
+```
+                 <<interface>>
+        +------------------------------+
+        |  StockNotificationObservable |
+        +------------------------------+
+        | +add(observer)               |
+        | +remove(observer)            |
+        | +notifySubscribers()         |
+        | +setStockCount(int)          |
+        | +getStockCount(): int        |
+        +------------------------------+
+                    ▲
+                    |
+         implements  |
+                    |
+     +-----------------------------------+
+     | IphoneStockObservableImpl         |
+     +-----------------------------------+
+     | - stockCount : int                |
+     | - observers : List<NotificationObserver> |
+     +-----------------------------------+
+     | +add(observer)                    |
+     | +remove(observer)                 |
+     | +notifySubscribers()              |
+     | +setStockCount(int)               |
+     | +getStockCount(): int             |
+     +-----------------------------------+
+                    |
+                    | maintains
+                    | 1..*
+                    ▼
+        +------------------------------+
+        |  <<interface>>               |
+        |  NotificationObserver        |
+        +------------------------------+
+        | +update()                    |
+        +------------------------------+
+                    ▲
+                    |
+        --------------------------------
+        |                              |
++-----------------------------+   +------------------------------+
+| EmailNotificationObserver   |   | MobileNotificationObserver   |
++-----------------------------+   +------------------------------+
+| - emailId : String          |   | - phoneNumber : String       |
+| - observable : StockObservable | | - observable : StockObservable |
++-----------------------------+   +------------------------------+
+| +update()                   |   | +update()                    |
++-----------------------------+   +------------------------------+
+```
+
+---
+
+# 🧠 How to EXPLAIN this UML in an Interview (VERY IMPORTANT)
+
+Say this **slowly and confidently**:
+
+> “`StockNotificationObservable` is the Subject interface.
+> `IphoneStockObservableImpl` is the concrete subject that maintains stock state and a list of observers.
+> `NotificationObserver` is the Observer interface with a single `update()` method.
+> `EmailNotificationObserver` and `MobileNotificationObserver` are concrete observers that implement notification logic.
+> When stock changes from zero to available, the observable notifies all registered observers by calling `update()`.”
+
+That explanation alone is **10/10**.
+
+---
+
+# 🔍 Key Relationships (interviewer might ask)
+
+### 1️⃣ Association (Observable → Observer)
+
+- One observable
+- Many observers
+- Stored as a `List`
+
+👉 _This is the core of Observer Pattern._
+
+---
+
+### 2️⃣ Interface-based dependency
+
+- Observable depends on `NotificationObserver` (interface)
+- Observers depend on `StockNotificationObservable` (interface)
+
+👉 _Loose coupling + DIP satisfied._
+
+---
+
+### 3️⃣ Runtime flow (quick version)
+
+1. Client registers observers
+2. Stock changes
+3. Observable calls `notifySubscribers()`
+4. Each observer’s `update()` executes
+
+---
+
+# 🎯 If interviewer asks: “Why not inheritance?”
+
+Best answer:
+
+> “Because notification behavior varies independently of stock behavior. Composition via Observer Pattern avoids inheritance explosion and follows Open–Closed Principle.”
+
+---
+
+# 🧪 One-line summary (memorize this)
+
+> “Observer Pattern establishes a one-to-many dependency where observers are notified automatically when the subject’s state changes, without tight coupling.”
