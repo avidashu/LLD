@@ -1,0 +1,322 @@
+
+# 📘 Decorator Design Pattern — Complete Notes
+
+---
+
+## 1️⃣ What is Decorator Pattern?
+
+**Decorator Pattern** allows behavior to be **added dynamically** to an object by **wrapping it**, without modifying the original class.
+
+> It follows the principle: **Open for extension, closed for modification**.
+
+---
+
+## 2️⃣ When to Use Decorator Pattern?
+
+Use Decorator Pattern when:
+
+* You need to add **optional or combinable features**
+* You want to avoid **class explosion**
+* Behavior needs to be added **at runtime**
+* Inheritance becomes rigid or unscalable
+
+### Typical use cases:
+
+* Pizza toppings
+* Coffee add-ons
+* Text formatting (bold, italic, underline)
+* Logging / authentication wrappers
+
+---
+
+## 3️⃣ Problem Without Decorator Pattern (Bad Design)
+
+### Naive inheritance approach ❌
+
+```
+Margherita
+MargheritaWithCheese
+MargheritaWithCheeseAndJalapeno
+MargheritaWithCheeseMushroomOlives
+```
+
+### Problems:
+
+* ❌ Exponential number of classes
+* ❌ Not scalable
+* ❌ Violates Open–Closed Principle
+* ❌ Hard to maintain and test
+
+---
+
+## 4️⃣ Core Idea of Decorator Pattern
+
+> Wrap an object inside another object of the **same base type**, and add behavior before or after delegating the call.
+
+Key concepts:
+
+* **IS-A** relationship (inheritance)
+* **HAS-A** relationship (composition)
+
+---
+
+## 5️⃣ Roles in Decorator Pattern
+
+| Role               | In Pizza Example                           |
+| ------------------ | ------------------------------------------ |
+| Component          | `BasePizza`                                |
+| Concrete Component | `Margherita`, `Farmhouse`, `MushroomPizza` |
+| Decorator          | `Toppings`                                 |
+| Concrete Decorator | `ExtraCheeseTopping`, `JalapenoTopping`    |
+| Client             | `PizzaStore`                               |
+
+---
+
+## 6️⃣ UML Mental Model (Very Important)
+
+```
+        BasePizza
+            ▲
+            |
+      ----------------
+      |              |
+ Margherita       Farmhouse
+      ▲
+      |
+   Toppings (Decorator)
+      ▲
+      |
+ -------------------------
+ |                       |
+ExtraCheeseTopping   JalapenoTopping
+```
+
+Each decorator **wraps** a `BasePizza`.
+
+---
+
+## 7️⃣ Component (Base Abstraction)
+
+```java
+public abstract class BasePizza {
+    public abstract double cost();
+}
+```
+
+### Why abstract class?
+
+* Common behavior
+* Decorators can extend it
+* Keeps type hierarchy consistent
+
+---
+
+## 8️⃣ Decorator Abstract Class
+
+```java
+public abstract class Toppings extends BasePizza {
+
+    protected BasePizza basePizza;
+
+    public Toppings(BasePizza basePizza) {
+        this.basePizza = basePizza;
+    }
+
+    protected abstract double getToppingCost();
+
+    @Override
+    public double cost() {
+        return basePizza.cost() + getToppingCost();
+    }
+}
+```
+
+### Key points:
+
+* `Toppings IS-A BasePizza`
+* `Toppings HAS-A BasePizza`
+* Delegates cost calculation
+* Core of Decorator Pattern
+
+---
+
+## 9️⃣ Concrete Components (Base Pizzas)
+
+```java
+public class Margherita extends BasePizza {
+    @Override
+    public double cost() {
+        return 10.0;
+    }
+}
+```
+
+```java
+public class Farmhouse extends BasePizza {
+    @Override
+    public double cost() {
+        return 12.0;
+    }
+}
+```
+
+```java
+public class MushroomPizza extends BasePizza {
+    @Override
+    public double cost() {
+        return 15.0;
+    }
+}
+```
+
+📌 These are **standalone objects** — no decorators involved yet.
+
+---
+
+## 1️⃣0️⃣ Concrete Decorators (Toppings)
+
+### Extra Cheese
+
+```java
+public class ExtraCheeseTopping extends Toppings {
+
+    public ExtraCheeseTopping(BasePizza basePizza) {
+        super(basePizza);
+    }
+
+    @Override
+    protected double getToppingCost() {
+        return 15.0;
+    }
+}
+```
+
+### Jalapeno
+
+```java
+public class JalapenoTopping extends Toppings {
+
+    public JalapenoTopping(BasePizza basePizza) {
+        super(basePizza);
+    }
+
+    @Override
+    protected double getToppingCost() {
+        return 7.0;
+    }
+}
+```
+
+### Why this works:
+
+* Each decorator adds **only its own responsibility**
+* No modification to base pizza
+* Fully extensible
+
+---
+
+## 1️⃣1️⃣ Client Code (Usage)
+
+```java
+public class PizzaStore {
+
+    public static void main(String[] args) {
+
+        BasePizza margherita = new Margherita();
+        System.out.println("Margherita Pizza Cost: " + margherita.cost());
+
+        BasePizza farmhouse = new Farmhouse();
+        System.out.println("Farmhouse Pizza Cost: " + farmhouse.cost());
+
+        BasePizza customPizza =
+                new ExtraCheeseTopping(
+                    new JalapenoTopping(
+                        new Margherita()
+                    )
+                );
+
+        System.out.println(
+            "Margherita with Extra Cheese and Jalapeno Toppings Cost: "
+            + customPizza.cost()
+        );
+    }
+}
+```
+
+---
+
+## 1️⃣2️⃣ Runtime Flow (Must Explain in Interview)
+
+For:
+
+```java
+new ExtraCheeseTopping(
+    new JalapenoTopping(
+        new Margherita()
+    )
+).cost();
+```
+
+Execution order:
+
+1. `Margherita.cost()` → 10
+2. `JalapenoTopping.getToppingCost()` → +7
+3. `ExtraCheeseTopping.getToppingCost()` → +15
+
+✅ Total = **32**
+
+---
+
+## 1️⃣3️⃣ Why Decorator is Better Than Inheritance
+
+| Inheritance     | Decorator      |
+| --------------- | -------------- |
+| Compile-time    | Runtime        |
+| Rigid           | Flexible       |
+| Class explosion | Composable     |
+| Hard to extend  | Easy to extend |
+
+---
+
+## 1️⃣4️⃣ SOLID Principles Used
+
+| Principle                    | How                                 |
+| ---------------------------- | ----------------------------------- |
+| SRP                          | Each class has one responsibility   |
+| OCP                          | Add toppings without modifying code |
+| DIP                          | Client depends on `BasePizza`       |
+| Composition over Inheritance | Core design choice                  |
+
+---
+
+## 1️⃣5️⃣ Advantages
+
+✅ Avoids class explosion
+✅ Dynamic behavior addition
+✅ Easy extension
+✅ Clean & testable design
+
+---
+
+## 1️⃣6️⃣ Disadvantages
+
+❌ Many small classes
+❌ Can be confusing without documentation
+❌ Debugging nested decorators can be tricky
+
+---
+
+## 1️⃣7️⃣ Decorator vs Strategy (Quick Interview Note)
+
+* **Decorator** → Adds responsibilities
+* **Strategy** → Changes behavior
+
+Decorator wraps, Strategy replaces.
+
+---
+
+## 1️⃣8️⃣ One-Line Interview Definition (Memorize)
+
+> “Decorator Pattern allows responsibilities to be added dynamically to objects by wrapping them, without modifying their existing code.”
+
+---
