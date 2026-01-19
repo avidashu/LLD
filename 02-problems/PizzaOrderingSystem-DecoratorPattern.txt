@@ -1,0 +1,119 @@
+
+---
+
+# 🍕 PROBLEM STATEMENT
+
+### (Decorator Design Pattern)
+
+---
+
+## 📌 Problem Context
+
+You are designing a **Pizza Ordering System** for an online food delivery application.
+
+The system currently offers different **base pizzas**, and customers can customize their pizza by adding **multiple toppings**.
+
+---
+
+## 🎯 Functional Requirements
+
+1. The system should support multiple **base pizzas**, such as:
+
+   * Margherita
+   * Farmhouse
+   * Veg Delight
+
+2. Each pizza has a **base cost**.
+
+3. Customers can add **multiple toppings** to a pizza, such as:
+
+   * Extra Cheese
+   * Mushroom
+   * Olives
+   * Jalapeno
+
+4. Toppings can be added in **any combination and any order**.
+
+5. The **final cost** of the pizza should be the **sum of the base pizza cost and all added toppings**.
+
+---
+
+## ❌ Design Constraints (Important)
+
+* You should **not create a separate class for every possible pizza–topping combination**.
+* Adding a new topping should **NOT require modifying existing pizza or topping classes**.
+* Avoid:
+
+  * `if-else` chains
+  * `switch` statements
+  * Tight coupling between pizza and toppings
+
+---
+
+## 🧩 Non-Functional Requirements
+
+* The design should follow **Open–Closed Principle**.
+* The system should allow **easy extension** for new toppings or pizzas.
+* Prefer **composition over inheritance**.
+* Code should be **clean, reusable, and testable**.
+
+---
+
+## 🚫 What NOT to Do (Explicitly)
+
+❌ `CheeseMushroomPizza`
+❌ `CheeseMushroomOlivePizza`
+❌ Large inheritance hierarchies
+❌ Hard-coded cost logic
+
+---
+
+## 🧠 What the Interviewer Is Testing
+
+| Skill             | What they look for                        |
+| ----------------- | ----------------------------------------- |
+| Design Thinking   | Can you identify combinatorial explosion? |
+| Pattern Knowledge | Do you recognize Decorator pattern?       |
+| OOP               | Abstraction, polymorphism, composition    |
+| SOLID             | Open–Closed Principle                     |
+| Clean Code        | Extendable without modification           |
+
+---
+
+## ✅ Expected Output (Conceptual)
+
+Example:
+
+```java
+Pizza pizza =
+    new ExtraCheese(
+        new Mushroom(
+            new Margherita()
+        )
+    );
+
+System.out.println(pizza.cost());
+```
+
+Output:
+
+```
+Base Margherita cost + Mushroom cost + Extra Cheese cost
+```
+
+---
+
+## 🗣 Interview Clarifications (Safe to Ask)
+
+You may ask:
+
+* “Can toppings be added multiple times?” → **Yes**
+* “Can new toppings be introduced later?” → **Yes**
+* “Should pricing logic be dynamic?” → **Yes**
+
+---
+
+## 🎯 Final Interview Hint
+
+> If the cost of an object needs to be extended dynamically without modifying the original class, **Decorator Pattern** is the right choice.
+
